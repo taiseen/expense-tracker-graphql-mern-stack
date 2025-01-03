@@ -46,3 +46,4 @@ npm run dev
 ## Resources:-
 
 <https://ui.aceternity.com>
+<https://graphql.org/>
