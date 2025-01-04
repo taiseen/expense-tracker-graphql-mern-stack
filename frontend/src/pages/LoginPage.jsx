@@ -1,11 +1,11 @@
-import InputField from "../components/InputField";
+import AuthInputField from "../components/AuthInputField";
 import Loading from "../components/Loading";
+import errorInfo from "../utils/error";
 import toast from "react-hot-toast";
 import { LOGIN } from "../graphql/mutations/userMutation";
 import { useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import errorInfo from "../utils/error";
 
 const LoginPage = () => {
 
@@ -46,7 +46,7 @@ const LoginPage = () => {
                         </h1>
 
                         <form className='space-y-4' onSubmit={handleSubmitLogin}>
-                            <InputField
+                            <AuthInputField
                                 label='Username'
                                 id='username'
                                 name='username'
@@ -54,7 +54,7 @@ const LoginPage = () => {
                                 onChange={handleChange}
                             />
 
-                            <InputField
+                            <AuthInputField
                                 label='Password'
                                 id='password'
                                 name='password'

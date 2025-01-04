@@ -1,4 +1,4 @@
-const InputField = ({ label, id, name, type = "text", onChange, value }) => {
+const AuthInputField = ({ label, id, name, type = "text", onChange, value }) => {
     return (
         <div>
             <label htmlFor={id} className='block text-sm font-medium text-gray-700'>
@@ -17,4 +17,4 @@ const InputField = ({ label, id, name, type = "text", onChange, value }) => {
     );
 };
 
-export default InputField;
+export default AuthInputField;

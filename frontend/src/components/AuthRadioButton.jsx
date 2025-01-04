@@ -1,4 +1,4 @@
-const RadioButton = ({ id, label, onChange, value, checked }) => {
+const AuthRadioButton = ({ id, label, onChange, value, checked }) => {
 
     return (
         <div className='inline-flex items-center'>
@@ -32,4 +32,4 @@ const RadioButton = ({ id, label, onChange, value, checked }) => {
     );
 };
 
-export default RadioButton;
+export default AuthRadioButton;

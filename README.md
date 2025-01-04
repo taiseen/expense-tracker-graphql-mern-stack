@@ -2,15 +2,15 @@
 
 # Expense Tracker | GraphQL MERN App
 
-## Backend run at local-machine:-
+## Backend & Frontend run at local-machine:-
 
 ```js
-npm run dev
+npm run dev || yarn dev
 ```
 
 ## Backend Package List:-
 
-* npm init -y
+* `npm init -y`
 * npm i express
 * npm i express-session
 * npm i graphql
@@ -27,7 +27,7 @@ npm run dev
 
 ## Frontend Package List:-
 
-* npm create vite@latest .
+* `npm create vite@latest .`
 * npm i react-router-dom
 * npm i react-icons
 * npm i react-hot-toast
@@ -41,11 +41,12 @@ npm run dev
 * npm i tailwind-merge
 * npm i @tailwindcss/aspect-ratio
 * npm i tailwindcss postcss autoprefixer `-D`
-* npx tailwindcss init -p
+* `npx tailwindcss init -p`
 
 ## Resources:-
 
-<https://ui.aceternity.com>
-<https://graphql.org/>
-<https://mdbootstrap.com>
-<https://tecdn.b-cdn.net/img/new/avatars/2.webp>
+* <https://graphql.org>
+* <https://ui.aceternity.com>
+* <https://mdbootstrap.com>
+* <https://avatar-placeholder.iran.liara.run>
+* <https://tecdn.b-cdn.net/img/new/avatars/2.webp>

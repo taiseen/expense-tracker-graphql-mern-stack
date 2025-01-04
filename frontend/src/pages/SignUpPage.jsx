@@ -1,5 +1,5 @@
-import RadioButton from "../components/RadioButton";
-import InputField from "../components/InputField";
+import AuthRadioButton from "../components/AuthRadioButton";
+import AuthInputField from "../components/AuthInputField";
 import Loading from "../components/Loading";
 import errorInfo from "../utils/error";
 import { SIGN_UP } from "../graphql/mutations/userMutation";
@@ -54,7 +54,7 @@ const SignUpPage = () => {
                         </h1>
 
                         <form className='space-y-4' onSubmit={handleSubmit}>
-                            <InputField
+                            <AuthInputField
                                 label='Full Name'
                                 id='name'
                                 name='name'
@@ -62,7 +62,7 @@ const SignUpPage = () => {
                                 onChange={handleChange}
                             />
 
-                            <InputField
+                            <AuthInputField
                                 label='Username'
                                 id='username'
                                 name='username'
@@ -70,7 +70,7 @@ const SignUpPage = () => {
                                 onChange={handleChange}
                             />
 
-                            <InputField
+                            <AuthInputField
                                 label='Password'
                                 id='password'
                                 name='password'
@@ -80,7 +80,7 @@ const SignUpPage = () => {
                             />
 
                             <div className='flex gap-10'>
-                                <RadioButton
+                                <AuthRadioButton
                                     id='male'
                                     label='Male'
                                     name='gender'
@@ -89,7 +89,7 @@ const SignUpPage = () => {
                                     checked={signUpData.gender === "male"}
                                 />
 
-                                <RadioButton
+                                <AuthRadioButton
                                     id='female'
                                     label='Female'
                                     name='gender'
