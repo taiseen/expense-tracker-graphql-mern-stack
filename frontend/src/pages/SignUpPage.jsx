@@ -1,36 +1,46 @@
 import RadioButton from "../components/RadioButton";
 import InputField from "../components/InputField";
+import Loading from "../components/Loading";
+import errorInfo from "../utils/error";
+import { SIGN_UP } from "../graphql/mutations/userMutation";
+import { useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+const defaultState = { name: "", username: "", password: "", gender: "" };
+
 const SignUpPage = () => {
-    const [signUpData, setSignUpData] = useState({
-        name: "",
-        username: "",
-        password: "",
-        gender: "",
-    });
+
+    const [signUpData, setSignUpData] = useState(defaultState);
+
+    const [signup, { loading }] = useMutation(SIGN_UP,
+        { refetchQueries: ["GetAuthenticatedUser"] }
+    );
+
 
     const handleChange = (e) => {
         const { name, value, type } = e.target;
 
-        if (type === "radio") {
-            setSignUpData((prevData) => ({
-                ...prevData,
-                gender: value,
-            }));
-        } else {
-            setSignUpData((prevData) => ({
-                ...prevData,
-                [name]: value,
-            }));
-        }
+        type === "radio"
+            ? setSignUpData((prevData) => ({ ...prevData, gender: value }))
+            : setSignUpData((prevData) => ({ ...prevData, [name]: value }));
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(signUpData);
+
+        try {
+            await signup({
+                variables: {
+                    input: signUpData,
+                },
+            });
+        } catch (error) {
+            errorInfo("SignUpPage", error);
+        }
     };
+
 
     return (
         <div className='h-screen flex justify-center items-center'>
@@ -38,6 +48,7 @@ const SignUpPage = () => {
                 <div className='w-full bg-gray-100 min-w-80 sm:min-w-96 flex items-center justify-center'>
                     <div className='max-w-md w-full p-6'>
                         <h1 className='text-3xl font-semibold mb-6 text-black text-center'>Sign Up</h1>
+
                         <h1 className='text-sm font-semibold mb-6 text-gray-500 text-center'>
                             Join to keep track of your expenses
                         </h1>
@@ -50,6 +61,7 @@ const SignUpPage = () => {
                                 value={signUpData.name}
                                 onChange={handleChange}
                             />
+
                             <InputField
                                 label='Username'
                                 id='username'
@@ -76,6 +88,7 @@ const SignUpPage = () => {
                                     onChange={handleChange}
                                     checked={signUpData.gender === "male"}
                                 />
+
                                 <RadioButton
                                     id='female'
                                     label='Female'
@@ -91,14 +104,14 @@ const SignUpPage = () => {
                                     type='submit'
                                     className='w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black  focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed'
                                 >
-                                    Sign Up
+                                    {loading ? <Loading /> : "Sign Up"}
                                 </button>
                             </div>
                         </form>
 
                         <div className='mt-4 text-sm text-gray-600 text-center'>
                             <p>
-                                Already have an account?{" "}
+                                Already have an account?&nbsp;
                                 <Link to='/login' className='text-black hover:underline'>
                                     Login here
                                 </Link>

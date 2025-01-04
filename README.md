@@ -47,3 +47,5 @@ npm run dev
 
 <https://ui.aceternity.com>
 <https://graphql.org/>
+<https://mdbootstrap.com>
+<https://tecdn.b-cdn.net/img/new/avatars/2.webp>

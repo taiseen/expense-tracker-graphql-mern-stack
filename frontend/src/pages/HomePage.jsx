@@ -1,12 +1,16 @@
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { GET_AUTHENTICATED_USER } from "../graphql/queries/userQuery";
+import { Doughnut } from "react-chartjs-2";
+import { useQuery } from "@apollo/client";
 import TransactionForm from "../components/TransactionForm";
 import Cards from "../components/Cards";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
-import { MdLogout } from "react-icons/md";
+import Logout from "../components/Logout";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const HomePage = () => {
+
+    const { data: authUserData } = useQuery(GET_AUTHENTICATED_USER);
 
     const chartData = {
         labels: ["Saving", "Expense", "Investment"],
@@ -24,12 +28,6 @@ const HomePage = () => {
         ],
     };
 
-    const handleLogout = () => {
-        console.log("Logging out...");
-    };
-
-    const loading = false;
-
     return (
         <>
             <div className='flex flex-col gap-6 items-center max-w-7xl mx-auto z-20 relative justify-center'>
@@ -39,13 +37,13 @@ const HomePage = () => {
                     </p>
 
                     <img
-                        src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
+                        // src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
+                        src={authUserData?.authUser.profilePicture}
                         className='w-11 h-11 rounded-full border cursor-pointer'
                         alt='Avatar'
                     />
-                    {!loading && <MdLogout className='mx-2 w-5 h-5 cursor-pointer' onClick={handleLogout} />}
-                    {/* loading spinner */}
-                    {loading && <div className='w-6 h-6 border-t-2 border-b-2 mx-2 rounded-full animate-spin'></div>}
+
+                    <Logout />
                 </div>
 
                 <div className='flex flex-wrap w-full justify-center items-center gap-6'>

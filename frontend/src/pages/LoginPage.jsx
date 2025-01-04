@@ -1,25 +1,39 @@
 import InputField from "../components/InputField";
+import Loading from "../components/Loading";
+import toast from "react-hot-toast";
+import { LOGIN } from "../graphql/mutations/userMutation";
+import { useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import errorInfo from "../utils/error";
 
 const LoginPage = () => {
-    const [loginData, setLoginData] = useState({
-        username: "",
-        password: "",
-    });
+
+    const [loginData, setLoginData] = useState({ username: "", password: "" });
+
+    const [login, { loading }] = useMutation(LOGIN,
+        { refetchQueries: ["GetAuthenticatedUser"] }
+    );
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setLoginData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        setLoginData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+
+    const handleSubmitLogin = async (e) => {
         e.preventDefault();
-        console.log(loginData);
+
+        if (!loginData.username || !loginData.password) return toast.error("Please fill in all fields");
+
+        try {
+            await login({ variables: { input: loginData } });
+        } catch (error) {
+            errorInfo("LoginPage", error);
+        }
     };
+
 
     return (
         <div className='flex justify-center items-center h-screen'>
@@ -31,7 +45,7 @@ const LoginPage = () => {
                             Welcome back! Log in to your account
                         </h1>
 
-                        <form className='space-y-4' onSubmit={handleSubmit}>
+                        <form className='space-y-4' onSubmit={handleSubmitLogin}>
                             <InputField
                                 label='Username'
                                 id='username'
@@ -53,17 +67,20 @@ const LoginPage = () => {
                                 <button
                                     type='submit'
                                     className='w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black  focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300
-										disabled:opacity-50 disabled:cursor-not-allowed
-									'
+										disabled:opacity-50 disabled:cursor-not-allowed'
                                 >
-                                    Login
+                                    {
+                                        loading
+                                            ? <Loading />
+                                            : "Login"
+                                    }
                                 </button>
                             </div>
                         </form>
 
                         <div className='mt-4 text-sm text-gray-600 text-center'>
                             <p>
-                                {"Don't"} have an account?{" "}
+                                {"Don't"} have an account?&nbsp;
                                 <Link to='/signup' className='text-black hover:underline'>
                                     Sign Up
                                 </Link>
