@@ -1,14 +1,13 @@
-import { GET_AUTHENTICATED_USER } from "../graphql/queries/userQuery";
-import { GET_TRANSACTIONS } from "../graphql/queries/transactionQuery";
 import { useQuery } from "@apollo/client";
 import Loading from "./Loading";
+import gql from "../graphql";
 import Card from "./Card";
 
 const Cards = () => {
 
-    const { data, loading } = useQuery(GET_TRANSACTIONS);
-    const { data: authUser } = useQuery(GET_AUTHENTICATED_USER);
-    // const { data: userAndTransactions } = useQuery(GET_USER_AND_TRANSACTIONS,
+    const { data, loading } = useQuery(gql.query.getTransactions);
+    const { data: authUser } = useQuery(gql.query.getAuthenticatedUser);
+    // const { data: userAndTransactions } = useQuery(gql.query.getUserAndTransactions,
     //     { variables: { userId: authUser?.authUser?._id } }
     // );
 

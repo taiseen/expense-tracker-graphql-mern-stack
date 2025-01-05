@@ -2,7 +2,7 @@ import AuthInputField from "../components/AuthInputField";
 import Loading from "../components/Loading";
 import errorInfo from "../utils/error";
 import toast from "react-hot-toast";
-import { LOGIN } from "../graphql/mutations/userMutation";
+import gql from "../graphql";
 import { useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -11,8 +11,8 @@ const LoginPage = () => {
 
     const [loginData, setLoginData] = useState({ username: "", password: "" });
 
-    const [login, { loading }] = useMutation(LOGIN,
-        { refetchQueries: ["GetAuthenticatedUser"] }
+    const [login, { loading }] = useMutation(gql.mutation.login,
+        { refetchQueries: [gql.query.getAuthenticatedUser] }
     );
 
 

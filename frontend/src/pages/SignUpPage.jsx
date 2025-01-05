@@ -2,7 +2,7 @@ import AuthRadioButton from "../components/AuthRadioButton";
 import AuthInputField from "../components/AuthInputField";
 import Loading from "../components/Loading";
 import errorInfo from "../utils/error";
-import { SIGN_UP } from "../graphql/mutations/userMutation";
+import gql from "../graphql";
 import { useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -13,8 +13,8 @@ const SignUpPage = () => {
 
     const [signUpData, setSignUpData] = useState(defaultState);
 
-    const [signup, { loading }] = useMutation(SIGN_UP,
-        { refetchQueries: ["GetAuthenticatedUser"] }
+    const [signup, { loading }] = useMutation(gql.mutation.signUp,
+        { refetchQueries: [gql.query.getAuthenticatedUser] }
     );
 
 

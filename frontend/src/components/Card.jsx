@@ -1,16 +1,10 @@
-import { DELETE_TRANSACTION } from "../graphql/mutations/transactionMutation";
 import { MdOutlinePayments } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaSackDollar } from "react-icons/fa6";
-import { useMutation } from "@apollo/client";
-import { HiPencilAlt } from "react-icons/hi";
 import { BsCardText } from "react-icons/bs";
-import { FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import formatDate from "../utils/formatDate";
-import errorInfo from "../utils/error";
-import toast from "react-hot-toast";
-import Loading from "./Loading";
+import CardActions from "./CardActions";
+
 
 const categoryColorMap = {
     saving: "from-green-700 to-green-400",
@@ -26,44 +20,13 @@ const Card = ({ transaction, authUser }) => {
 
     const cardClass = categoryColorMap[category];
 
-    const [deleteTransaction, { loading }] = useMutation(DELETE_TRANSACTION,
-        { refetchQueries: ["GetTransactions", "GetTransactionStatistics"] }
-    );
-
-
-    const handleDelete = async () => {
-        try {
-            if (confirm("Are you sure you want to delete this transaction?")) {
-                await deleteTransaction({ variables: { transactionId: id } });
-                toast.success("Transaction deleted successfully");
-            }
-        } catch (error) {
-            errorInfo("Card deleting transaction", error);
-        }
-    };
-
-
     return (
         <div className={`rounded-md p-4 bg-gradient-to-br ${cardClass}`}>
             <div className='flex flex-col gap-3'>
                 <div className='flex flex-row items-center justify-between'>
                     <h2 className='text-lg font-bold text-white'>Saving</h2>
 
-                    <div className='flex items-center gap-2'>
-                        {
-                            loading
-                                ? <Loading />
-                                : <FaTrash
-                                    className={"cursor-pointer"}
-                                    title="Delete Transaction"
-                                    onClick={handleDelete}
-                                />
-                        }
-
-                        <Link to={`/transaction/${id}`}>
-                            <HiPencilAlt title="Edit Transaction" className='cursor-pointer' size={20} />
-                        </Link>
-                    </div>
+                    <CardActions id={id} />
                 </div>
 
                 <p className='text-white flex items-center gap-1'>

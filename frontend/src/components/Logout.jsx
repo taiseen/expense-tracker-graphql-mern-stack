@@ -1,13 +1,13 @@
-import { LOGOUT } from "../graphql/mutations/userMutation";
 import { useMutation } from "@apollo/client";
 import { MdLogout } from "react-icons/md";
 import errorInfo from "../utils/error";
 import Loading from "./Loading";
+import gql from "../graphql";
 
 const Logout = () => {
 
-    const [logout, { loading, client }] = useMutation(LOGOUT,
-        { refetchQueries: ["GetAuthenticatedUser"] }
+    const [logout, { loading, client }] = useMutation(gql.mutation.logout,
+        { refetchQueries: [gql.query.getAuthenticatedUser] }
     );
 
     const handleLogout = async () => {

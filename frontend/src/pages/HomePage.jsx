@@ -1,16 +1,16 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { GET_AUTHENTICATED_USER } from "../graphql/queries/userQuery";
 import { Doughnut } from "react-chartjs-2";
 import { useQuery } from "@apollo/client";
 import TransactionForm from "../components/TransactionForm";
 import Cards from "../components/Cards";
 import Logout from "../components/Logout";
+import gql from "../graphql";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const HomePage = () => {
 
-    const { data: authUserData } = useQuery(GET_AUTHENTICATED_USER);
+    const { data: authUserData } = useQuery(gql.query.getAuthenticatedUser);
 
     const chartData = {
         labels: ["Saving", "Expense", "Investment"],
