@@ -1,35 +1,100 @@
-import { useState } from "react";
+import TransactionFormSkeleton from "../components/skeletons/TransactionFormSkeleton";
+import Loading from "../components/Loading";
+import errorInfo from "../utils/error";
+import toast from "react-hot-toast";
+import gql from "../graphql";
+import { useMutation, useQuery } from "@apollo/client";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+
+const categoryColorMap = {
+    investment: "from-blue-700 to-blue-400",
+    saving: "from-green-700 to-green-400",
+    expense: "from-pink-800 to-pink-600",
+    // Add more categories and corresponding color classes as needed
+};
 
 const TransactionPage = () => {
+
+    const { id } = useParams();
+
+    // 🟩🟩🟩 read operations...
+    const { loading, data } = useQuery(gql.query.getTransaction,
+        { variables: { id: id } }
+    );
+
+    // 🟥🟥🟥 write operations...
+    const [updateTransaction, { loading: loadingUpdate }] = useMutation(gql.mutation.updateTransaction,
+        // https://github.com/apollographql/apollo-client/issues/5419 => 
+        // refetchQueries is not working, and here is how we fixed it
+        { refetchQueries: [{ query: gql.query.getTransactionStatistics }] }
+    );
+
+
     const [formData, setFormData] = useState({
-        description: "",
-        paymentType: "",
-        category: "",
-        amount: "",
-        location: "",
-        date: "",
+        description: data?.transaction?.description || "",
+        paymentType: data?.transaction?.paymentType || "",
+        category: data?.transaction?.category || "",
+        location: data?.transaction?.location || "",
+        amount: data?.transaction?.amount || "",
+        date: data?.transaction?.date || "",
     });
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("formData", formData);
+
+        // convert amount to number bc by default it is string
+        // and the reason it's coming from an input field
+        const amount = parseFloat(formData.amount);
+
+        try {
+            await updateTransaction({
+                variables: {
+                    input: { ...formData, amount, transactionId: id },
+                },
+            });
+
+            toast.success("Transaction updated successfully");
+        } catch (error) {
+            errorInfo("TransactionPage Update Info", error);
+        }
     };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-        }));
+        setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     };
 
-    // if (loading) return <TransactionFormSkeleton />;
+
+    useEffect(() => {
+        if (data) {
+            setFormData({
+                description: data?.transaction?.description,
+                paymentType: data?.transaction?.paymentType,
+                category: data?.transaction?.category,
+                location: data?.transaction?.location,
+                amount: data?.transaction?.amount,
+                date: new Date(+data.transaction.date).toISOString().substr(0, 10),
+            });
+        }
+    }, [data, data?.transaction?.category]);
+
+
+    const btnBgClass = categoryColorMap[data?.transaction?.category];
+
+
+    if (loading) return <TransactionFormSkeleton />;
+
 
     return (
         <div className='h-screen max-w-4xl mx-auto flex flex-col items-center'>
             <p className='md:text-4xl text-2xl lg:text-4xl font-bold text-center relative z-50 mb-4 mr-4 bg-gradient-to-r from-pink-600 via-indigo-500 to-pink-400 inline-block text-transparent bg-clip-text'>
                 Update this transaction
             </p>
+
             <form className='w-full max-w-lg flex flex-col gap-5 px-3 ' onSubmit={handleSubmit}>
                 {/* TRANSACTION */}
                 <div className='flex flex-wrap'>
@@ -51,7 +116,7 @@ const TransactionPage = () => {
                         />
                     </div>
                 </div>
-                
+
                 {/* PAYMENT TYPE */}
                 <div className='flex flex-wrap gap-3'>
                     <div className='w-full flex-1 mb-6 md:mb-0'>
@@ -98,12 +163,13 @@ const TransactionPage = () => {
                                 id='category'
                                 name='category'
                                 onChange={handleInputChange}
-                                defaultValue={formData.category}
+                                defaultValue={formData?.category}
                             >
                                 <option value={"saving"}>Saving</option>
                                 <option value={"expense"}>Expense</option>
                                 <option value={"investment"}>Investment</option>
                             </select>
+
                             <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
                                 <svg
                                     className='fill-current h-4 w-4'
@@ -176,11 +242,15 @@ const TransactionPage = () => {
 
                 {/* SUBMIT BUTTON */}
                 <button
-                    className='text-white font-bold w-full rounded px-4 py-2 bg-gradient-to-br
-          from-pink-500 to-pink-500 hover:from-pink-600 hover:to-pink-600'
+                    className={`*:text-white font-bold w-full rounded px-4 py-2 bg-gradient-to-br ${btnBgClass} disabled:from-gray-500 disabled:to-gray-500 disabled:cursor-not-allowed`}
                     type='submit'
+                    disabled={loadingUpdate}
                 >
-                    Update Transaction
+                    {
+                        loadingUpdate
+                            ? <Loading />
+                            : "Update Transaction"
+                    }
                 </button>
             </form>
         </div>
