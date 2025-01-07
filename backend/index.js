@@ -60,12 +60,14 @@ const server = new ApolloServer({
 // Ensure we wait for our server to start
 await server.start();
 
+const clientAllowedList = ["http://localhost:3000", "http://localhost:7000"];
+
 // Set up our Express middleware to handle CORS, body parsing,
 // and our expressMiddleware function.
 app.use(
     "/graphql",
     cors({
-        origin: "http://localhost:3000", // client url...
+        origin: clientAllowedList, // client url's...
         credentials: true,
     }),
     express.json(),
