@@ -3,7 +3,9 @@ import { CREATE_TRANSACTION, DELETE_TRANSACTION, UPDATE_TRANSACTION } from "./mu
 import { GET_AUTHENTICATED_USER, GET_USER_AND_TRANSACTIONS } from "./queries/userQuery";
 import { LOGIN, LOGOUT, SIGN_UP } from "./mutations/userMutation";
 
+
 const gql = {
+
     mutation: {
         login: LOGIN,
         logout: LOGOUT,
@@ -12,6 +14,7 @@ const gql = {
         deleteTransaction: DELETE_TRANSACTION,
         updateTransaction: UPDATE_TRANSACTION,
     },
+
     query: {
         // getAuthenticatedUser: 'GetAuthenticatedUser',
         getAuthenticatedUser: GET_AUTHENTICATED_USER,

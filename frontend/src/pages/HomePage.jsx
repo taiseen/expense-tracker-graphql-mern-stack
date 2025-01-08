@@ -1,32 +1,22 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { useQuery } from "@apollo/client";
+import useStatisticsChart from "../hooks/useStatisticsChart";
 import TransactionForm from "../components/TransactionForm";
 import Cards from "../components/Cards";
 import Logout from "../components/Logout";
 import gql from "../graphql";
 
+
 ChartJS.register(ArcElement, Tooltip, Legend);
+
 
 const HomePage = () => {
 
     const { data: authUserData } = useQuery(gql.query.getAuthenticatedUser);
 
-    const chartData = {
-        labels: ["Saving", "Expense", "Investment"],
-        datasets: [
-            {
-                label: "%",
-                data: [13, 8, 3],
-                backgroundColor: ["rgba(75, 192, 192)", "rgba(255, 99, 132)", "rgba(54, 162, 235)"],
-                borderColor: ["rgba(75, 192, 192)", "rgba(255, 99, 132)", "rgba(54, 162, 235, 1)"],
-                borderWidth: 1,
-                borderRadius: 30,
-                spacing: 10,
-                cutout: 130,
-            },
-        ],
-    };
+    const chartData = useStatisticsChart();
+
 
     return (
         <>
@@ -59,4 +49,5 @@ const HomePage = () => {
         </>
     );
 };
+
 export default HomePage;

@@ -4,6 +4,7 @@ import errorInfo from "../utils/error";
 import Loading from "./Loading";
 import gql from "../graphql";
 
+
 const Logout = () => {
 
     const [logout, { loading, client }] = useMutation(gql.mutation.logout,
@@ -15,7 +16,7 @@ const Logout = () => {
             await logout();
             // Clear the Apollo Client cache FROM THE DOCS
             // https://www.apollographql.com/docs/react/caching/advanced-topics/#:~:text=Resetting%20the%20cache,any%20of%20your%20active%20queries
-            client.resetStore();
+            client.resetStore(); // clear the previous cache data...
         } catch (error) {
             errorInfo("Logout", error);
         }

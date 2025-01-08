@@ -1,16 +1,20 @@
 import { useMutation } from "@apollo/client";
+import { categoryType } from "../constants";
 import errorInfo from "../utils/error";
 import toast from "react-hot-toast";
 import Loading from "./Loading";
 import gql from "../graphql";
+
 
 const TransactionForm = () => {
 
     // ?? WHEN RELATIONSHIPS ARE ADDED, CHANGE THE REFETCH QUERY A BIT
     const [createTransaction, { loading }] = useMutation(gql.mutation.createTransaction,
         { refetchQueries: [gql.query.getTransactions, gql.query.getTransactionStatistics] }
+        // 🟢🟢🟢 by deleting transaction, we also update the transactions and statistics queries...
     );
 
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -26,8 +30,6 @@ const TransactionForm = () => {
             date: formData.get("date"),
         };
 
-        // console.log("transactionData", transactionData);
-
         try {
             await createTransaction({ variables: { input: transactionData } });
             form.reset();
@@ -36,6 +38,7 @@ const TransactionForm = () => {
             errorInfo("TransactionForm", error);
         }
     };
+
 
     return (
         <form className='w-full max-w-lg flex flex-col gap-5 px-3' onSubmit={handleSubmit}>
@@ -107,9 +110,9 @@ const TransactionForm = () => {
                             id='category'
                             name='category'
                         >
-                            <option value={"saving"}>Saving</option>
-                            <option value={"expense"}>Expense</option>
-                            <option value={"investment"}>Investment</option>
+                            <option value={categoryType.saving}>Saving</option>
+                            <option value={categoryType.expense}>Expense</option>
+                            <option value={categoryType.investment}>Investment</option>
                         </select>
                         <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
                             <svg

@@ -12,6 +12,7 @@ const CardActions = ({ id }) => {
 
     const [deleteTransaction, { loading }] = useMutation(gql.mutation.deleteTransaction,
         { refetchQueries: [gql.query.getTransactions, gql.query.getTransactionStatistics] }
+        // 🟢🟢🟢 by deleting transaction, we also update the transactions and statistics queries...
     );
 
 

@@ -3,17 +3,11 @@ import Loading from "../components/Loading";
 import errorInfo from "../utils/error";
 import toast from "react-hot-toast";
 import gql from "../graphql";
+import { categoryColorMap, categoryType } from "../constants";
 import { useMutation, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-
-const categoryColorMap = {
-    investment: "from-blue-700 to-blue-400",
-    saving: "from-green-700 to-green-400",
-    expense: "from-pink-800 to-pink-600",
-    // Add more categories and corresponding color classes as needed
-};
 
 const TransactionPage = () => {
 
@@ -29,8 +23,10 @@ const TransactionPage = () => {
         // https://github.com/apollographql/apollo-client/issues/5419 => 
         // refetchQueries is not working, and here is how we fixed it
         { refetchQueries: [{ query: gql.query.getTransactionStatistics }] }
+        // 🟢🟢🟢 by deleting transaction, we also update the transactions and statistics queries...
     );
 
+    const btnBgClass = categoryColorMap[data?.transaction?.category];
 
     const [formData, setFormData] = useState({
         description: data?.transaction?.description || "",
@@ -40,6 +36,20 @@ const TransactionPage = () => {
         amount: data?.transaction?.amount || "",
         date: data?.transaction?.date || "",
     });
+
+
+    useEffect(() => {
+        if (data) {
+            setFormData({
+                description: data?.transaction?.description,
+                paymentType: data?.transaction?.paymentType,
+                category: data?.transaction?.category,
+                location: data?.transaction?.location,
+                amount: data?.transaction?.amount,
+                date: new Date(+data.transaction.date).toISOString().substr(0, 10),
+            });
+        }
+    }, [data, data?.transaction?.category]);
 
 
     const handleSubmit = async (e) => {
@@ -67,23 +77,6 @@ const TransactionPage = () => {
         const { name, value } = e.target;
         setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     };
-
-
-    useEffect(() => {
-        if (data) {
-            setFormData({
-                description: data?.transaction?.description,
-                paymentType: data?.transaction?.paymentType,
-                category: data?.transaction?.category,
-                location: data?.transaction?.location,
-                amount: data?.transaction?.amount,
-                date: new Date(+data.transaction.date).toISOString().substr(0, 10),
-            });
-        }
-    }, [data, data?.transaction?.category]);
-
-
-    const btnBgClass = categoryColorMap[data?.transaction?.category];
 
 
     if (loading) return <TransactionFormSkeleton />;
@@ -165,9 +158,9 @@ const TransactionPage = () => {
                                 onChange={handleInputChange}
                                 defaultValue={formData?.category}
                             >
-                                <option value={"saving"}>Saving</option>
-                                <option value={"expense"}>Expense</option>
-                                <option value={"investment"}>Investment</option>
+                                <option value={categoryType.saving}>Saving</option>
+                                <option value={categoryType.expense}>Expense</option>
+                                <option value={categoryType.investment}>Investment</option>
                             </select>
 
                             <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>

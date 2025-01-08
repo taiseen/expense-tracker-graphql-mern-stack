@@ -1,17 +1,10 @@
 import { MdOutlinePayments } from "react-icons/md";
+import { categoryColorMap } from "../constants";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaSackDollar } from "react-icons/fa6";
 import { BsCardText } from "react-icons/bs";
 import formatDate from "../utils/formatDate";
 import CardActions from "./CardActions";
-
-
-const categoryColorMap = {
-    saving: "from-green-700 to-green-400",
-    expense: "from-pink-800 to-pink-600",
-    investment: "from-blue-700 to-blue-400",
-    // Add more categories and corresponding color classes as needed
-};
 
 
 const Card = ({ transaction, authUser }) => {
