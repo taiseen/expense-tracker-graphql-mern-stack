@@ -1,11 +1,10 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useAuthUserQuery } from "../graphql/api";
 import { Doughnut } from "react-chartjs-2";
-import { useQuery } from "@apollo/client";
 import useStatisticsChart from "../hooks/useStatisticsChart";
 import TransactionForm from "../components/TransactionForm";
-import Cards from "../components/Cards";
 import Logout from "../components/Logout";
-import gql from "../graphql";
+import Cards from "../components/Cards";
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -13,11 +12,11 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const HomePage = () => {
 
-    const { data: authUserData } = useQuery(gql.query.getAuthenticatedUser);
+    const { data } = useAuthUserQuery();
 
     const chartData = useStatisticsChart();
 
-
+    
     return (
         <>
             <div className='flex flex-col gap-6 items-center max-w-7xl mx-auto z-20 relative justify-center'>
@@ -28,8 +27,9 @@ const HomePage = () => {
 
                     <img
                         // src={"https://tecdn.b-cdn.net/img/new/avatars/2.webp"}
-                        src={authUserData?.authUser.profilePicture}
                         className='w-11 h-11 rounded-full border cursor-pointer'
+                        src={data?.authUser.profilePicture}
+                        title={data?.authUser.name}
                         alt='Avatar'
                     />
 
@@ -37,9 +37,13 @@ const HomePage = () => {
                 </div>
 
                 <div className='flex flex-wrap w-full justify-center items-center gap-6'>
-                    <div className='h-[330px] w-[330px] md:h-[360px] md:w-[360px]  '>
-                        <Doughnut data={chartData} />
-                    </div>
+                    {
+                        chartData?.labels?.length > 0 && (
+                            <div className='h-[330px] w-[330px] md:h-[360px] md:w-[360px]'>
+                                <Doughnut data={chartData} />
+                            </div>
+                        )
+                    }
 
                     <TransactionForm />
                 </div>

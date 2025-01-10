@@ -1,21 +1,18 @@
-import { useQuery } from "@apollo/client";
+import { useAuthUserQuery, useTransactionsQuery } from "../graphql/api";
 import Loading from "./Loading";
-import gql from "../graphql";
 import Card from "./Card";
 
 const Cards = () => {
 
-    const { data, loading } = useQuery(gql.query.getTransactions);
-    const { data: authUser } = useQuery(gql.query.getAuthenticatedUser);
-    // const { data: userAndTransactions } = useQuery(gql.query.getUserAndTransactions,
-    //     { variables: { userId: authUser?.authUser?._id } }
-    // );
+    const { data, loading } = useTransactionsQuery();
 
+    const { data: authUser } = useAuthUserQuery();
+
+    // const { userAndTransactions} = useUserAndTransactionsQuery(authUser?.authUser?._id);
+  
     const notLoading = !loading;
     const noTransactionsData = notLoading && data?.transactions?.length === 0;
 
-    // console.log({ userAndTransactions });
-    // console.log({ data });
 
     return (
         <div className='w-full px-10 min-h-[40vh]'>

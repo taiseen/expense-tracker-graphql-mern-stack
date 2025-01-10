@@ -1,26 +1,27 @@
-import { useMutation } from "@apollo/client";
+import { useLogoutMutation } from "../graphql/api";
 import { MdLogout } from "react-icons/md";
 import errorInfo from "../utils/error";
 import Loading from "./Loading";
-import gql from "../graphql";
 
 
 const Logout = () => {
 
-    const [logout, { loading, client }] = useMutation(gql.mutation.logout,
-        { refetchQueries: [gql.query.getAuthenticatedUser] }
-    );
+    const { logout, loading, client } = useLogoutMutation();
+
 
     const handleLogout = async () => {
         try {
             await logout();
+            client.resetStore(); // clear the previous cache data...
+
             // Clear the Apollo Client cache FROM THE DOCS
             // https://www.apollographql.com/docs/react/caching/advanced-topics/#:~:text=Resetting%20the%20cache,any%20of%20your%20active%20queries
-            client.resetStore(); // clear the previous cache data...
+
         } catch (error) {
             errorInfo("Logout", error);
         }
     };
+
 
     return (
         <div className="flex items-center gap-1 mx-2">

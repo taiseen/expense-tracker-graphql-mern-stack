@@ -52,3 +52,6 @@ export const categoryColorMap = {
     expense: "from-pink-800 to-pink-600",
     // Add more categories and corresponding color classes as needed
 };
+
+
+export const defaultSignupInputState = { name: "", username: "", password: "", gender: "" };

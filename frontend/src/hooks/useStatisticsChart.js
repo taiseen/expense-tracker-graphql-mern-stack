@@ -1,14 +1,13 @@
 import { categoryType, color, defaultEmptyData } from '../constants';
-import { useQuery } from '@apollo/client';
+import { useTransactionStatisticsQuery } from '../graphql/api';
 import { useEffect, useState } from 'react'
-import gql from '../graphql';
 
 
 const useStatisticsChart = () => {
 
     const [chartData, setChartData] = useState(defaultEmptyData);
 
-    const { data } = useQuery(gql.query.getTransactionStatistics);
+    const { data } = useTransactionStatisticsQuery();
 
 
     useEffect(() => {
@@ -51,6 +50,5 @@ const useStatisticsChart = () => {
 
     return chartData;
 }
-
 
 export default useStatisticsChart;

@@ -1,20 +1,15 @@
-import { useMutation } from "@apollo/client";
+import { useCreateTransactionMutation } from "../graphql/api";
 import { categoryType } from "../constants";
 import errorInfo from "../utils/error";
 import toast from "react-hot-toast";
 import Loading from "./Loading";
-import gql from "../graphql";
 
 
 const TransactionForm = () => {
 
-    // ?? WHEN RELATIONSHIPS ARE ADDED, CHANGE THE REFETCH QUERY A BIT
-    const [createTransaction, { loading }] = useMutation(gql.mutation.createTransaction,
-        { refetchQueries: [gql.query.getTransactions, gql.query.getTransactionStatistics] }
-        // 🟢🟢🟢 by deleting transaction, we also update the transactions and statistics queries...
-    );
+    const { createTransaction, loading } = useCreateTransactionMutation();
 
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 

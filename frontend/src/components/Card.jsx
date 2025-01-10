@@ -13,6 +13,7 @@ const Card = ({ transaction, authUser }) => {
 
     const cardClass = categoryColorMap[category];
 
+    
     return (
         <div className={`rounded-md p-4 bg-gradient-to-br ${cardClass}`}>
             <div className='flex flex-col gap-3'>
@@ -48,6 +49,7 @@ const Card = ({ transaction, authUser }) => {
                     <img
                         className='h-8 w-8 border rounded-full'
                         src={authUser?.profilePicture}
+                        title={authUser?.name}
                         alt={authUser?.name}
                         loading='lazy'
                     />

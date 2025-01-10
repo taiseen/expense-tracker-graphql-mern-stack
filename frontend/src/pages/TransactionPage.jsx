@@ -2,9 +2,8 @@ import TransactionFormSkeleton from "../components/skeletons/TransactionFormSkel
 import Loading from "../components/Loading";
 import errorInfo from "../utils/error";
 import toast from "react-hot-toast";
-import gql from "../graphql";
+import { useTransactionByIdQuery, useUpdateTransactionMutation } from "../graphql/api";
 import { categoryColorMap, categoryType } from "../constants";
-import { useMutation, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -13,18 +12,9 @@ const TransactionPage = () => {
 
     const { id } = useParams();
 
-    // 🟩🟩🟩 read operations...
-    const { loading, data } = useQuery(gql.query.getTransaction,
-        { variables: { id: id } }
-    );
+    const { data, loading } = useTransactionByIdQuery(id);
 
-    // 🟥🟥🟥 write operations...
-    const [updateTransaction, { loading: loadingUpdate }] = useMutation(gql.mutation.updateTransaction,
-        // https://github.com/apollographql/apollo-client/issues/5419 => 
-        // refetchQueries is not working, and here is how we fixed it
-        { refetchQueries: [{ query: gql.query.getTransactionStatistics }] }
-        // 🟢🟢🟢 by deleting transaction, we also update the transactions and statistics queries...
-    );
+    const { updateTransaction, loadingUpdate } = useUpdateTransactionMutation();
 
     const btnBgClass = categoryColorMap[data?.transaction?.category];
 
@@ -249,4 +239,5 @@ const TransactionPage = () => {
         </div>
     );
 };
+
 export default TransactionPage;

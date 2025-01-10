@@ -1,19 +1,15 @@
-import { useMutation } from "@apollo/client"
+import { useDeleteTransactionMutation } from "../graphql/api"
 import { HiPencilAlt } from "react-icons/hi"
 import { FaTrash } from "react-icons/fa6"
 import { Link } from "react-router-dom"
 import errorInfo from "../utils/error"
 import toast from "react-hot-toast"
 import Loading from "./Loading"
-import gql from "../graphql"
 
 
 const CardActions = ({ id }) => {
 
-    const [deleteTransaction, { loading }] = useMutation(gql.mutation.deleteTransaction,
-        { refetchQueries: [gql.query.getTransactions, gql.query.getTransactionStatistics] }
-        // 🟢🟢🟢 by deleting transaction, we also update the transactions and statistics queries...
-    );
+    const { deleteTransaction, loading } = useDeleteTransactionMutation();
 
 
     const handleDelete = async () => {

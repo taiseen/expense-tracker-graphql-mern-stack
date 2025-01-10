@@ -2,20 +2,17 @@ import AuthRadioButton from "../components/AuthRadioButton";
 import AuthInputField from "../components/AuthInputField";
 import Loading from "../components/Loading";
 import errorInfo from "../utils/error";
-import gql from "../graphql";
-import { useMutation } from "@apollo/client";
+import { defaultSignupInputState } from "../constants";
+import { useSignUpMutation } from "../graphql/api";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-const defaultState = { name: "", username: "", password: "", gender: "" };
 
 const SignUpPage = () => {
 
-    const [signUpData, setSignUpData] = useState(defaultState);
+    const [signUpData, setSignUpData] = useState(defaultSignupInputState);
 
-    const [signup, { loading }] = useMutation(gql.mutation.signUp,
-        { refetchQueries: [gql.query.getAuthenticatedUser] }
-    );
+    const { signup, loading } = useSignUpMutation();
 
 
     const handleChange = (e) => {
@@ -46,6 +43,7 @@ const SignUpPage = () => {
         <div className='h-screen flex justify-center items-center'>
             <div className='flex rounded-lg overflow-hidden z-50 bg-gray-300'>
                 <div className='w-full bg-gray-100 min-w-80 sm:min-w-96 flex items-center justify-center'>
+
                     <div className='max-w-md w-full p-6'>
                         <h1 className='text-3xl font-semibold mb-6 text-black text-center'>Sign Up</h1>
 
@@ -118,6 +116,7 @@ const SignUpPage = () => {
                             </p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
