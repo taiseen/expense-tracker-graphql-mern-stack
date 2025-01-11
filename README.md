@@ -1,6 +1,6 @@
 > 29 December 2024
 
-# Expense Tracker | GraphQL MERN App
+# Expense Tracker | GraphQL MERN Stack
 
 ## Backend & Frontend run at local-machine:-
 

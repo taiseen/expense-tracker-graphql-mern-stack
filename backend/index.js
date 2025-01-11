@@ -60,12 +60,15 @@ const server = new ApolloServer({
 // Ensure we wait for our server to start
 await server.start();
 
-const clientAllowedList = ["http://localhost:3000", "http://localhost:7000"];
+const clientAllowedList = [
+    "http://localhost:3000",
+    "http://localhost:7000",
+    'https://graphql-mern-stack.onrender.com'
+];
 
 // Set up our Express middleware to handle CORS, body parsing,
 // and our expressMiddleware function.
-app.use(
-    "/graphql",
+app.use("/graphql",
     cors({
         origin: clientAllowedList, // client url's...
         credentials: true,
@@ -78,17 +81,13 @@ app.use(
     })
 );
 
+
 // npm run build will build your frontend app, 
 // and it will the optimized version of your app
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-app.get("/api", (req, res) => {
-    res.json({ message: "GraphQL Server..." });
-});
-
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
-});
+// any routes that don't start with /graphql will be routed to this index.html 
+app.get("*", (req, res) => res.sendFile(path.join(__dirname, "frontend/dist", "index.html")));
 
 
 const port = configs.port;
