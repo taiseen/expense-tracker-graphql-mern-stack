@@ -8,6 +8,14 @@
 npm run dev || yarn dev
 ```
 
+## To run this app need these values:-
+
+```js
+SESSION_SECRET = *** *** ***
+MONGO_DB_URL = *** *** ***
+SERVER_URL = *** *** ***
+```
+
 ## Backend Package List:-
 
 * `npm init -y`
